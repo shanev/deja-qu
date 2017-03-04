@@ -8,12 +8,12 @@ class DejaQu {
     this.redis = redis.createClient();
     this.namespace = namespace;
     this.queues = [];
-    this.expirationHanlder = new ExpirationHanlder(redis);
+    this.expirationObserver = new ExpirationObserver(redis);
   }
 
   // kick off the expiration subscription handler
   start() {
-    this.expirationHandler.start();
+    this.expirationObserver.start();
   }
 
   // create a queue and add to the queue list
@@ -23,33 +23,8 @@ class DejaQu {
   }
 }
 
-class Message {
-  static deserialize(messageString) {
-    return JSON.parse(messageString);
-  }
-
-  constructor(body, userId = null, refId = null, expiry = null) {
-    if (body == null) {
-      throw new Error('A message body is required.');
-    }
-
-    if (userId == null) {
-      throw new Error('A userId is required.');
-    }
-
-    this.body = body;
-    this.userId = userId;
-    this.refId = refId;
-    this.expiry = expiry;
-  }
-
-  serialize() {
-    JSON.stringify(this);
-  }
-}
-
-// sets up a FIFO queue
 class Queue {
+  // creates a FIFO queue
 	constructor(redis, name = 'timeline', userId) {
     if (redis == null) {
       throw new Error('Redis is required. Duh.');
@@ -62,6 +37,8 @@ class Queue {
     this.key = `user:${userId}:${name}`;
   }
 
+  // pushes a new message to the queue
+  // i.e: ``
 	push(message) {
     return new Promise((resolve) => {
       const serializedMessage = message.serialize();
@@ -129,7 +106,7 @@ class ExpirationKey {
 }
 
 // Subscribes to Redis keyspace events to delete expired messages from queues
-class ExpirationHandler {
+class ExpirationObserver {
   constructor(redis) {
     this.subscriber = redis.createClient();
     this.subscriber.config('SET', 'notify-keyspace-events', 'Ex');
@@ -141,13 +118,16 @@ class ExpirationHandler {
   start() {
     this.subscriber.psubscribe('__keyevent@0__:expired');
     this.subscriber.on('pmessage', (pattern, channel, expiredKey) => {
-      const expirationKey = ExpirationKey.unpack(expiredKey);
-      const queueName = expirationKey.queueName;
-      // iterate through queues and find the right one
+      const key = ExpirationKey.deserialize(expiredKey);
+      const queueName = key.queueName;
+      // TODO: iterate through queues and find the right one
+      
       // q.pop();
     });
   }
 }
+
+const Message = require('./src/message');
 
 module.exports = {
   DejaQu,
