@@ -41,6 +41,7 @@ class Message {
   }
 }
 
+// sets up a FIFO queue
 class Queue {
 	constructor(redis, name = 'timeline', userId) {
     if (redis == null) {
@@ -50,6 +51,7 @@ class Queue {
     if (userId == null) {
       throw new Error('A userId is required.');
     }
+    this.redis = redis;
     this.key = `user:${userId}:${name}`;
   }
 
@@ -57,13 +59,13 @@ class Queue {
     return new Promise((resolve) => {
       const serializedMessage = message.serialize();
       if (message.expiry == null) {
-        redis.rpush(`${key}`, serializedMessage, () => { 
+        this.redis.rpush(key, serializedMessage, () => { 
           debug(`Pushed message ${message.id} to ${key}`);
           return resolve();
         });
       } else {
-        redis.multi()
-          .rpush(`${key}`, serializedMessage)
+        this.redis.multi()
+          .rpush(key, serializedMessage)
           .set(`expires:user:${message.userId}:msg:${message.id}`, null, 'EX', message.expiry)
           .exec(() => {
             debug(`Pushed message ${message.id} to ${key}`);
@@ -73,7 +75,15 @@ class Queue {
     });
   }
 
-	get() {}
+  // get messages in a certain range from the top of the list, i.e: 0..5
+	get(start = 0, stop = 5) {
+    return new Promise((resolve) => {
+      this.redis.lrange(key, start, stop, (err, res) => {
+        debug(`Retrieving messages ${start}..${stop} from ${key}`);
+        return resolve(res);
+      });
+    });
+  }
 
 	pop() {}
 }
