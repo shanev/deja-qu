@@ -62,9 +62,18 @@ LPOP user:1:{queue}
 Publishing a message
 ```
 const dq = DejaQu(redis);
-const q = dq.createQueue(name, userId);
+
+const q = dq.createQueue('timeline', user1);
+
 const msg = new dq.Message("Hello", 86400);
+
 q.push(message);
+
+// expiration emitter
+// this could be on a different server
+q.on('expired', (message) => {
+    // message expired
+    });
 ```
 
 Getting a range of messages

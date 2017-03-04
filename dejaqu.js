@@ -7,12 +7,11 @@ class DejaQu {
     }
     this.redis = redis;
     this.namespace = namespace;
-    this.queues = [];
+    this.queues = null;
   }
 
   createQueue(name, userId) {
-    const q = new Queue(redis, name, userId);
-    queues.push[q];
+    this.queue = new Queue(redis, name, userId);
   }
 }
 
