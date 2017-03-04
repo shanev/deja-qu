@@ -2,7 +2,12 @@
   "name": "deja-qu",
   "version": "0.1.0",
   "description": "Redis-backed emphemeral message queue for Node.js",
-  "keywords": ["redis", "queue", "messaging", "nodejs"],
+  "keywords": [
+    "redis",
+    "queue",
+    "messaging",
+    "nodejs"
+  ],
   "main": "dejaqu.js",
   "author": "Shane Vitarana <shanev@gmail.com>",
   "license": "MIT",
@@ -12,13 +17,14 @@
     "url": ""
   },
   "dependencies": {
-    "debug": "^2.6.1"
+    "debug": "^2.6.1",
+    "redis": "^2.6.5",
+    "shortid": "^2.2.6"
   },
   "scripts": {
-    "test": "DEBUG=dejaqu mocha"
+    "test": "DEBUG=deja-qu mocha"
   },
   "devDependencies": {
-    "redis": "^2.6.5",
     "eslint": "^3.16.1",
     "eslint-config-airbnb-base": "^11.1.0",
     "eslint-plugin-import": "^2.2.0",

@@ -1,3 +1,5 @@
+const shortId = require('shortid');
+
 class Message {
   // deserialize() a Redis string in a Message object
   static deserialize(messageString) {
@@ -5,11 +7,15 @@ class Message {
   }
 
   // construct a message, a body is required, currently serializes to JSON
-  constructor(body, userId = null, refId = null, expiry = null) {
+  constructor(id = null, body, userId = null, refId = null, expiry = null) {
     if (body == null) {
       throw new Error('A message body is required.');
     }
 
+    // generate an id if one isn't passed in
+    this.id = id || shortId.generate();
+
+    // set fields
     this.body = body;
     this.userId = userId;
     this.refId = refId;
