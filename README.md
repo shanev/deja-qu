@@ -1,52 +1,8 @@
 # Deja Qu
 
-## Data structures
+Deja Qu is an ephemeral message queue backed by Redis. It allows you to easily build ephemeral messaging services
 
-### Message (String)
-
-```
-MSG
-  id: 1234
-  body: jhjkh,
-  user: id,
-  created: date,
-  ref: id
-```
-
-`create()`
-
-### Queue (List)
-
-```
-user:1:timeline MSG MSG MSG
-user:1:${queue} MSG MSG MSG
-```
-
-`push()`
-```
-RPUSH user:1:{queue} MSG`
-SET expires:user:1:msg:id null EX [time]
-```
-
-`get()`
-```
-LRANGE user:1:{queue} 0 5
-```
-
-`pop()` & `expireMessage()`
-```
-LPOP user:1:{queue}
-```
-
-### ExpirationKey (String)
-
-```
-expires:user:1:MSG:id
-```
-
-`create()`
-
-## PubSub
+## Redis setup
 
 ### ExpirationService
 
@@ -59,7 +15,7 @@ LPOP user:1:{queue}
 
 ## Usage
 
-Publishing a message
+Publish a message
 ```
 const dq = DejaQu(redis);
 
@@ -68,20 +24,14 @@ const q = dq.createQueue('timeline', user1);
 const msg = new dq.Message("Hello", 86400);
 
 q.push(message);
-
-// expiration emitter
-// this could be on a different server
-q.on('expired', (message) => {
-    // message expired
-    });
 ```
 
-Getting a range of messages
+Get a range of messages (0..5)
 ```
-let messages = await q.get();
+let messages = await q.get(0, 5);
 ```
 
-Deleting a message
+Delete oldest message in queue
 ```
 q.pop();
 ```

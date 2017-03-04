@@ -106,35 +106,8 @@ class ExpirationKey {
   }
 }
 
-class ExpirationService {
-  constructor(subscriber) {
-    if (subscriber == null) {
-      throw new Error('A subscriber (Redis client) is required.');
-    }
-    this.subscriber = subscriber;
-    this.subscriber.config('SET', 'notify-keyspace-events', 'Ex');
-  }
-
-	subscribe() {
-    this.subscriber.psubscribe('__keyevent@0__:expired');
-    this.subscriber.on('pmessage', function(pattern, channel, expiredKey) {
-      // console.log('key [' +  expiredKey + '] has expired');
-      // var userUUID = expiredKey.split(':')[0];
-      // var User = require('../models/user');
-      // User.expireMessageForUser(userUUID, function(cb) {
-        // console.log('expired message for user ' + userUUID);
-      // });
-    });
-  }
-
-	expire(message) {
-
-  }
-}
-
 module.exports = {
   DejaQu,
   Message,
   Queue,
-  ExpirationService,
 };
