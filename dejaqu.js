@@ -128,4 +128,5 @@ module.exports = {
   DejaQu,
   Message,
   Queue,
+  ExpirationService,
 };
