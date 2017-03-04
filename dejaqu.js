@@ -65,10 +65,9 @@ class Queue {
         });
       } else {
         // push message to queue and publish an expire event
-        const expireKey = new ExpirationKey(message).key;
         this.redis.multi()
           .rpush(key, serializedMessage)
-          .set(expireKey, null, 'EX', message.expiry)
+          .set(`expires:user:${message.userId}:msg:${message.id}`, null, 'EX', message.expiry)
           .exec(() => {
             debug(`Pushed message ${message.id} to ${key}`);
             return resolve();
@@ -97,12 +96,6 @@ class Queue {
         return resolve(res);
       });
     });
-  }
-}
-
-class ExpirationKey {
-  constructor(message) {
-    this.key = `expires:user:${message.userId}:msg:${message.id}`;
   }
 }
 
