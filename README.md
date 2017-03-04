@@ -61,8 +61,8 @@ LPOP user:1:{queue}
 
 Publishing a message
 ```
-const dq = DejaQu(redis, userId);
-const q = new dq.Queue();
+const dq = DejaQu(redis);
+const q = dq.createQueue(name, userId);
 const msg = new dq.Message("Hello", 86400);
 q.push(message);
 ```

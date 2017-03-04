@@ -7,10 +7,12 @@ class DejaQu {
     }
     this.redis = redis;
     this.namespace = namespace;
+    this.queues = [];
   }
 
-  createQueue(name, userId, redis = redis) {
-
+  createQueue(name, userId) {
+    const q = new Queue(redis, name, userId);
+    queues.push[q];
   }
 }
 
@@ -29,8 +31,8 @@ class Message {
     }
 
     this.body = body;
-    this.user = user;
-    this.ref = ref;
+    this.userId = userId;
+    this.refId = refId;
     this.expiry = expiry;
   }
 
@@ -40,7 +42,11 @@ class Message {
 }
 
 class Queue {
-	constructor(name = 'timeline', userId) {
+	constructor(redis, name = 'timeline', userId) {
+    if (redis == null) {
+      throw new Error('Redis is required. Duh.');
+    }
+
     if (userId == null) {
       throw new Error('A userId is required.');
     }
@@ -48,7 +54,23 @@ class Queue {
   }
 
 	push(message) {
-
+    return new Promise((resolve) => {
+      const serializedMessage = message.serialize();
+      if (message.expiry == null) {
+        redis.rpush(`${key}`, serializedMessage, () => { 
+          debug(`Pushed message ${message.id} to ${key}`);
+          return resolve();
+        });
+      } else {
+        redis.multi()
+          .rpush(`${key}`, serializedMessage)
+          .set(`expires:user:${message.userId}:msg:${message.id}`, null, 'EX', message.expiry)
+          .exec(() => {
+            debug(`Pushed message ${message.id} to ${key}`);
+            return resolve();
+          });
+      }
+    });
   }
 
 	get() {}
