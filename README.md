@@ -56,3 +56,23 @@ expires:user:1:MSG:id
 ```
 LPOP user:1:{queue}
 ```
+
+## Usage
+
+Publishing a message
+```
+const dq = DejaQu(redis, userId);
+const q = new dq.Queue();
+const msg = new dq.Message("Hello", 86400);
+q.push(message);
+```
+
+Getting a range of messages
+```
+let messages = await q.get();
+```
+
+Deleting a message
+```
+q.pop();
+```
