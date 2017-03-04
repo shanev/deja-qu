@@ -76,6 +76,7 @@ class Queue {
   }
 
   // get messages in a certain range from the top of the list, i.e: 0..5
+  // returns a Promise with the messages
 	get(start = 0, stop = 5) {
     return new Promise((resolve) => {
       this.redis.lrange(key, start, stop, (err, res) => {
@@ -85,7 +86,16 @@ class Queue {
     });
   }
 
-	pop() {}
+  // delete the top message in the queue
+  // returns a Promise with the deleted message
+	pop() {
+    return new Promise((resolve) => {
+      this.redis.lpop(key, (err, res) => {
+        debug(`Deleted top message in ${key}`);
+        return resolve(res);
+      });
+    });
+  }
 }
 
 class ExpirationService {
