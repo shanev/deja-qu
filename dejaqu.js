@@ -73,7 +73,7 @@ class Queue {
         });
       } else {
         // push message to queue and publish an expire event
-        const expirationKey = new ExpirationKey(name, userId, message);
+        const expirationKey = new ExpirationKey(name, userId, message).serialize();
         this.redis.multi()
           .rpush(key, serializedMessage)
           .set(expirationKey, null, 'EX', message.expiry)
@@ -118,11 +118,13 @@ class ExpirationKey {
   }
 
   constructor(queueName, userId, message) {
-    this.key = `expires:user:${userId}:${queueName}:${message.id}`;
+    this.queueName = queueName;
+    this.userId = userId;
+    this.message = message;
   }
 
   serialize() {
-    return this.key;
+    return `expires:user:${this.userId}:${this.queueName}:${this.message.id}`;
   }
 }
 
