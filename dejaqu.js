@@ -85,26 +85,6 @@ class Queue {
   }
 }
 
-class ExpirationKey {
-  static deserialize(expiredKey) {
-    const tokens = expiredKey.split(':');
-    const userId = token[2];
-    const queueName = token[3];
-    const messageId = token[4];
-    return new ExpirationKey(queueName, userId, messageId);
-  }
-
-  constructor(queueName, userId, message) {
-    this.queueName = queueName;
-    this.userId = userId;
-    this.message = message;
-  }
-
-  serialize() {
-    return `expires:user:${this.userId}:${this.queueName}:${this.message.id}`;
-  }
-}
-
 // Subscribes to Redis keyspace events to delete expired messages from queues
 class ExpirationObserver {
   constructor(redis) {
@@ -128,6 +108,8 @@ class ExpirationObserver {
 }
 
 const Message = require('./src/message');
+
+// const ExpirationKey = require('.src/expirationKey');
 
 module.exports = {
   DejaQu,

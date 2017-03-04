@@ -4,18 +4,17 @@ const dq = require('../dejaqu.js');
 
 describe('Message model', () => {
   it('should construct a message', (done) => {
-    const body = "Hello";
-    const msg = new dq.Message(body);
+    const msg = new dq.Message('Hello');
     assert(msg);
     done();
   });
 
   it('should serialize a Message', (done) => {
-    const msg = new dq.Message("Hello", 123, 456, 789);
+    const msg = new dq.Message('Hello', 123, 456, 789);
     const result = msg.serialize();
     assert.equal(result, '{"body":"Hello","userId":123,"refId":456,"expiry":789}');
     done();
-  })
+  });
 
   it('should deserialize a Message', (done) => {
     const msg = dq.Message.deserialize('{"body":"Hello","userId":123,"refId":456,"expiry":789}');
