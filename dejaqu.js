@@ -67,9 +67,10 @@ class Queue {
         });
       } else {
         // push message to queue and publish an expire event
+        const expirationKey = new ExpirationKey(name, userId, message);
         this.redis.multi()
           .rpush(key, serializedMessage)
-          .set(`expires:user:${message.userId}:msg:${message.id}`, null, 'EX', message.expiry)
+          .set(expirationKey, null, 'EX', message.expiry)
           .exec(() => {
             debug(`Pushed message ${message.id} to ${key}`);
             return resolve();
@@ -101,6 +102,20 @@ class Queue {
   }
 }
 
+class ExpirationKey {
+  static unpack(expiredKey) {
+    const tokens = expiredKey.split(':');
+    const userId = token[2];
+    const queueName = token[3];
+    const messageId = token[4];
+    return new ExpirationKey(queueName, userId, messageId);
+  }
+
+  constructor(queueName, userId, message) {
+    this.key = `expires:user:${userId}:${queueName}:${message.id}`;
+  }
+}
+
 // Subscribes to Redis keyspace events to delete expired messages from queues
 class ExpirationHandler {
   constructor(redis) {
@@ -118,12 +133,10 @@ class ExpirationHandler {
     subscriber.psubscribe('__keyevent@0__:expired');
 
     subscriber.on('pmessage', function(pattern, channel, expiredKey) {
-      // console.log('key [' +  expiredKey + '] has expired');
-      var userUUID = expiredKey.split(':')[0];
-      var User = require('../models/user');
-      User.expireMessageForUser(userUUID, function(cb) {
-        // console.log('expired message for user ' + userUUID);
-      });
+      const expirationKey = ExpirationKey.unpack(expiredKey);
+      const queueName = expirationKey.queueName;
+      // iterate through queues and find the right one
+      // q.pop();
     });
   }
 }
