@@ -58,14 +58,17 @@ class Queue {
     return new Promise((resolve) => {
       const serializedMessage = message.serialize();
       if (message.expiry == null) {
+        // push message to queue and don't publish an expire event
         this.redis.rpush(key, serializedMessage, () => { 
           debug(`Pushed message ${message.id} to ${key}`);
           return resolve();
         });
       } else {
+        // push message to queue and publish an expire event
+        const expireKey = new ExpirationKey(message).key;
         this.redis.multi()
           .rpush(key, serializedMessage)
-          .set(`expires:user:${message.userId}:msg:${message.id}`, null, 'EX', message.expiry)
+          .set(expireKey, null, 'EX', message.expiry)
           .exec(() => {
             debug(`Pushed message ${message.id} to ${key}`);
             return resolve();
@@ -94,6 +97,12 @@ class Queue {
         return resolve(res);
       });
     });
+  }
+}
+
+class ExpirationKey {
+  constructor(message) {
+    this.key = `expires:user:${message.userId}:msg:${message.id}`;
   }
 }
 
