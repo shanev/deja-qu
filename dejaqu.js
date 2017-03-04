@@ -5,13 +5,15 @@ class DejaQu {
     if (redis == null) {
       throw new Error('Initialized without a Redis client.');
     }
-    this.redis = redis;
+    this.redis = redis.createClient();
     this.namespace = namespace;
-    this.queues = null;
+    this.queues = [];
+    this.expirationHanlder = new ExpirationHanlder(redis);
   }
 
   createQueue(name, userId) {
-    this.queue = new Queue(redis, name, userId);
+    const q = new Queue(redis, name, userId);
+    this.queues.push(q);
   }
 }
 
@@ -94,6 +96,33 @@ class Queue {
       this.redis.lpop(key, (err, res) => {
         debug(`Deleted top message in ${key}`);
         return resolve(res);
+      });
+    });
+  }
+}
+
+// Subscribes to Redis keyspace events to delete expired messages from queues
+class ExpirationHandler {
+  constructor(redis) {
+    subscriber = redis.createClient();
+    subscriber.config('SET', 'notify-keyspace-events', 'Ex');
+
+    client.on('error', function(err) {
+      console.log('Error ' + err);
+    });
+
+    subscriber.on('error', function(err) {
+      console.log('Error ' + err);
+    });
+
+    subscriber.psubscribe('__keyevent@0__:expired');
+
+    subscriber.on('pmessage', function(pattern, channel, expiredKey) {
+      // console.log('key [' +  expiredKey + '] has expired');
+      var userUUID = expiredKey.split(':')[0];
+      var User = require('../models/user');
+      User.expireMessageForUser(userUUID, function(cb) {
+        // console.log('expired message for user ' + userUUID);
       });
     });
   }
