@@ -11,6 +11,12 @@ class DejaQu {
     this.expirationHanlder = new ExpirationHanlder(redis);
   }
 
+  // kick off the expiration subscription handler
+  start() {
+    this.expirationHandler.start();
+  }
+
+  // create a queue and add to the queue list
   createQueue(name, userId) {
     const q = new Queue(redis, name, userId);
     this.queues.push(q);
@@ -103,7 +109,7 @@ class Queue {
 }
 
 class ExpirationKey {
-  static unpack(expiredKey) {
+  static deserialize(expiredKey) {
     const tokens = expiredKey.split(':');
     const userId = token[2];
     const queueName = token[3];
@@ -114,25 +120,25 @@ class ExpirationKey {
   constructor(queueName, userId, message) {
     this.key = `expires:user:${userId}:${queueName}:${message.id}`;
   }
+
+  serialize() {
+    return this.key;
+  }
 }
 
 // Subscribes to Redis keyspace events to delete expired messages from queues
 class ExpirationHandler {
   constructor(redis) {
-    subscriber = redis.createClient();
-    subscriber.config('SET', 'notify-keyspace-events', 'Ex');
-
-    client.on('error', function(err) {
-      console.log('Error ' + err);
+    this.subscriber = redis.createClient();
+    this.subscriber.config('SET', 'notify-keyspace-events', 'Ex');
+    this.subscriber.on('error', (err) => {
+      debug('Error ' + err);
     });
+  }
 
-    subscriber.on('error', function(err) {
-      console.log('Error ' + err);
-    });
-
-    subscriber.psubscribe('__keyevent@0__:expired');
-
-    subscriber.on('pmessage', function(pattern, channel, expiredKey) {
+  start() {
+    this.subscriber.psubscribe('__keyevent@0__:expired');
+    this.subscriber.on('pmessage', (pattern, channel, expiredKey) => {
       const expirationKey = ExpirationKey.unpack(expiredKey);
       const queueName = expirationKey.queueName;
       // iterate through queues and find the right one
