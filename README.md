@@ -1,4 +1,4 @@
-# Deja qu
+# Déjà qu
 
 Deja qu is an ephemeral FIFO message queue backed by Redis. It allows you to easily build ephemeral timelines/stories.
 
