@@ -2,24 +2,16 @@ const assert = require('assert');
 
 const dq = require('../dejaqu.js');
 
-const redis = require('redis');
-
-const client = redis.createClient();
-
-// this is how redis errors are handled
-client.on('error', (err) => {
-  console.log(err);
-});
-
 describe('Queue model', () => {
   before(() => {
-    client.flushdb();
+    new dq.DejaQu().redisClient.flushdb();
   });
 
   function createQueue() {
     const name = 'timeline';
     const userId = 1234;
-    const q = new dq.Queue(name, userId);
+    const redisClient = new dq.DejaQu().redisClient;
+    const q = new dq.Queue(redisClient, name, userId);
     return q;
   }
 
