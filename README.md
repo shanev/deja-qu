@@ -3,6 +3,7 @@
 [![npm version](https://badge.fury.io/js/deja-qu.svg)](https://badge.fury.io/js/deja-qu)
 [![Build Status](https://travis-ci.org/shanev/deja-qu.svg?branch=master)](https://travis-ci.org/shanev/deja-qu)
 [![codecov](https://codecov.io/gh/shanev/deja-qu/branch/master/graph/badge.svg)](https://codecov.io/gh/shanev/deja-qu)
+[![codebeat badge](https://codebeat.co/badges/12303061-af38-468a-a118-c6663732ad90)](https://codebeat.co/projects/github-com-shanev-deja-qu-master)
 [![Dependencies](https://david-dm.org/shanev/deja-qu.svg)](https://david-dm.org/shanev/deja-qu)
 
 Déjà qu is Redis-backed FIFO message queue for storing ephemeral data. It allows you to easily build ephemeral timelines/stories. It automatically removes the message from the queue once it's expired. No polling, cron jobs, or timers needed.
