@@ -2,6 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/deja-qu.svg)](https://badge.fury.io/js/deja-qu)
 [![Build Status](https://travis-ci.org/shanev/deja-qu.svg?branch=master)](https://travis-ci.org/shanev/deja-qu)
+[![Dependencies](https://david-dm.org/shanev/deja-qu.svg)](https://david-dm.org/shanev/deja-qu)
 
 Déjà qu is Redis-backed FIFO message queue for storing ephemeral data. It allows you to easily build ephemeral timelines/stories. It automatically removes the message from the queue once it's expired. No polling, cron jobs, or timers needed.
 
