@@ -11,10 +11,10 @@
   "main": "dejaqu.js",
   "author": "Shane Vitarana <shanev@gmail.com>",
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://github.com/shanev/deja-qu",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/shanev/deja-qu.git"
   },
   "dependencies": {
     "debug": "^2.6.1",
