@@ -1,29 +1,34 @@
 # Déjà qu
 
-Déjà qu is Redis-backed FIFO message queue for storing ephemeral data. It allows you to easily build ephemeral timelines/stories. It automatically removes the message from the queue once it's expired. No polling, cron jobs, or `setTimeout()`'s needed. 
+Déjà qu is Redis-backed FIFO message queue for storing ephemeral data. It allows you to easily build ephemeral timelines/stories. It automatically removes the message from the queue once it's expired. No polling, cron jobs, or timers needed.
 
 ## Usage
 
-Initialize Déjà qu and create a queue
-```javascript
-const dq = DejaQu(redis);
+Initialize and start Déjà qu
+```js
+const dq = DejaQu();
 
+dq.start();
+```
+
+Create a queue
+```js
 const q = dq.createQueue('timeline', user1);
 ```
 
 Create and add a message that expires in 24 hours
-```javascript
-const msg = new dq.Message("Hello", 86400);
+```js
+const msg = new dq.Message('Have I seen this before?', 86400);
 
-q.push(message);
+q.push(msg);
 ```
 
-Get a range of messages (0..5)
-```javascript
-let messages = await q.get(0, 5);
+Get the first 5 messages
+```js
+const messages = await q.get(0, 4);
 ```
 
-Delete oldest message
-```javascript
+Delete the oldest message
+```js
 const message = await q.pop();
 ```

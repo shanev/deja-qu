@@ -12,6 +12,9 @@ class ExpirationObserver {
     }
 
     this.publisher = redis.createClient();
+    this.publisher.on('error', (err) => {
+      debug(`Redis client error: ${err}`);
+    });
     this.subscriber = redis.createClient();
     this.subscriber.config('SET', 'notify-keyspace-events', 'Ex');
     this.subscriber.on('error', (err) => {
