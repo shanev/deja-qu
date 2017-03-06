@@ -7,6 +7,26 @@
 
 Déjà qu is Redis-backed FIFO message queue for storing ephemeral data. It allows you to easily build ephemeral timelines/stories. It automatically removes the message from the queue once it's expired. No polling, cron jobs, or timers needed.
 
+## Installation
+
+If you are using yarn:
+
+```sh
+yarn add deja-qu
+```
+
+or npm:
+
+```sh
+npm install deja-qu --save
+```
+
+Run Redis server:
+```sh
+redis-server
+```
+Check out [Redis quickstart](https://redis.io/topics/quickstart) to install.
+
 ## Usage
 
 Initialize and start Déjà qu
@@ -36,6 +56,21 @@ const messages = await q.get(0, 4);
 Delete the oldest message
 ```js
 const message = await q.pop();
+```
+
+## Debugging
+
+Add `DEBUG=deja-qu` to the node start script in `package.json` to see debug output. i.e:
+
+```sh
+DEBUG=deja-qu node server.js
+```
+
+## Tests
+
+```sh
+yarn install # or npm install
+npm test
 ```
 
 ## Author
