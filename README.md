@@ -37,3 +37,7 @@ Delete the oldest message
 ```js
 const message = await q.pop();
 ```
+
+## Author
+
+Shane Vitarana :: [http://shanev.me](http://shanev.me) :: [@shanev](https://twitter.com/shanev)
