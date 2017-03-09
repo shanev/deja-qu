@@ -6,7 +6,7 @@
 [![codebeat badge](https://codebeat.co/badges/12303061-af38-468a-a118-c6663732ad90)](https://codebeat.co/projects/github-com-shanev-deja-qu-master)
 [![Dependencies](https://david-dm.org/shanev/deja-qu.svg)](https://david-dm.org/shanev/deja-qu)
 
-Déjà qu is Redis-backed FIFO message queue for storing any kind of ephemeral data. It allows you to easily build ephemeral timelines/stories, or expire time-bound items like login codes and temporary passwords. Messages are automatically removed from the queue once they're expired, without the need for polling, cron jobs, or timers.
+Déjà qu is Redis-backed FIFO message queue for storing any kind of ephemeral data. It allows you to easily build ephemeral timelines/stories. Messages are automatically removed from the queue once they're expired, without the need for polling, cron jobs, or timers.
 
 ## Installation
 
