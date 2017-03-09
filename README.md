@@ -32,7 +32,7 @@ Check out [Redis quickstart](https://redis.io/topics/quickstart) to install.
 
 Initialize and start Déjà qu
 ```js
-const dq = DejaQu();
+const dq = new DejaQu();
 
 dq.start();
 ```
