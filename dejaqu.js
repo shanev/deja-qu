@@ -29,8 +29,4 @@ class DejaQu {
   }
 }
 
-module.exports = {
-  DejaQu,
-  Message,
-  Queue,
-};
+module.exports = { DejaQu, Message };

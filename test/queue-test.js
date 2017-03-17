@@ -1,23 +1,23 @@
 const assert = require('assert');
 
-const dq = require('../dejaqu.js');
+const DejaQu = require('../dejaqu.js').DejaQu;
+
+const Message = require('../dejaqu.js').Message;
 
 describe('Queue model', () => {
   before(() => {
-    new dq.DejaQu().redisClient.flushdb();
+    new DejaQu().redisClient.flushdb();
   });
 
   function createQueue() {
-    const namespace = 'dejaqu';
     const name = 'timeline';
     const userId = 1234;
-    const redisClient = new dq.DejaQu().redisClient;
-    const q = new dq.Queue(redisClient, namespace, name, userId);
+    const q = new DejaQu().getQueue(name, userId);
     return q;
   }
 
   function createMessage() {
-    const msg = new dq.Message(null, 'Hello');
+    const msg = new Message(null, 'Hello');
     return msg;
   }
 
@@ -27,7 +27,7 @@ describe('Queue model', () => {
     const userId = 123;
     const refId = null;
     const expiry = 5; // seconds
-    const msg = new dq.Message(id, body, userId, refId, expiry);
+    const msg = new Message(id, body, userId, refId, expiry);
     return msg;
   }
 

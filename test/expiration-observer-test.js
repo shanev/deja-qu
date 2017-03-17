@@ -1,22 +1,22 @@
 const assert = require('assert');
 
-const dq = require('../dejaqu.js');
+const DejaQu = require('../dejaqu.js').DejaQu;
 
-const dqClient = new dq.DejaQu();
+const Message = require('../dejaqu.js').Message;
+
+const dq = new DejaQu();
 
 const ExpirationObserver = require('../src/expiration-observer');
 
 describe('Expiration observer', () => {
   before(() => {
-    dqClient.redisClient.flushdb();
+    dq.redisClient.flushdb();
   });
 
   function createQueue() {
-    const namespace = 'dejaqu';
     const name = 'timeline';
     const userId = 1234;
-    const redisClient = dqClient.redisClient;
-    const q = new dq.Queue(redisClient, namespace, name, userId);
+    const q = dq.getQueue(name, userId);
     return q;
   }
 
@@ -26,7 +26,7 @@ describe('Expiration observer', () => {
     const userId = 123;
     const refId = null;
     const expiry = 1; // seconds
-    const msg = new dq.Message(id, body, userId, refId, expiry);
+    const msg = new Message(id, body, userId, refId, expiry);
     return msg;
   }
 
