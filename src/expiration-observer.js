@@ -12,22 +12,29 @@ class ExpirationObserver {
     this.publisher = (config != null) ? redis.createClient(config) : redis.createClient();
     this.subscriber = (config != null) ? redis.createClient(config) : redis.createClient();
     this.subscriber.config('SET', 'notify-keyspace-events', 'Ex');
+    this.expiredPattern = '__keyevent@0__:expired';
   }
 
   // start observing expiring keys
   start() {
-    this.subscriber.psubscribe('__keyevent@0__:expired');
+    this.subscriber.psubscribe(this.expiredPattern);
     this.subscriber.on('pmessage', (pattern, channel, expiredKey) => {
       const key = ExpirationKey.deserialize(expiredKey);
       const namespace = key.namespace;
       const queueName = key.queueName;
       const userId = key.userId;
       const q = new Queue(this.publisher, namespace, queueName, userId);
-      debug(`Handling expired key: ${expiredKey}`);
+      debug(`[ExpirationObserver] Handling expired key: ${expiredKey}`);
       q.pop().then((msg) => {
-        debug(`Popped ${msg.id} from ${q.key}`);
+        debug(`[ExpirationObserver] Popped ${msg.id} from ${q.key}`);
       });
     });
+  }
+
+  end() {
+    this.subscriber.punsubscribe(this.expiredPattern);
+    this.subscriber.quit();
+    this.publisher.quit();
   }
 }
 

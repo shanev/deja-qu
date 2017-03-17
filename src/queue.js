@@ -36,7 +36,7 @@ class Queue {
         // push message to queue and don't publish an expire event
         this.redisClient.rpush(this.key, serializedMessage, (err, count) => {
           if (err) { return reject(err); }
-          debug(`Pushed message ${message.id} to ${this.key}`);
+          debug(`[Queue] Pushed message ${message.id} to ${this.key}`);
           return resolve(count[0]);
         });
       } else {
@@ -47,7 +47,7 @@ class Queue {
           .set(expirationKey, message.id, 'EX', message.expiry)
           .exec((err, count) => {
             if (err) { return reject(err); }
-            debug(`Pushed message ${message.id} to ${this.key}`);
+            debug(`[Queue] Pushed message ${message.id} to ${this.key}`);
             return resolve(count[0]);
           });
       }
@@ -62,7 +62,7 @@ class Queue {
     return new Promise((resolve, reject) => {
       this.redisClient.lrange(this.key, start, stop, (err, res) => {
         if (err) { return reject(err); }
-        debug(`Retrieving messages ${start}..${stop} from ${this.key}`);
+        debug(`[Queue] Retrieving messages ${start}..${stop} from ${this.key}`);
         return resolve(res);
       });
     });
@@ -76,7 +76,7 @@ class Queue {
     return new Promise((resolve, reject) => {
       this.redisClient.lpop(this.key, (err, res) => {
         if (err) { return reject(err); }
-        debug(`Deleted first message in ${this.key}`);
+        debug(`[Queue] Popped first message from ${this.key}`);
         return resolve(Message.deserialize(res));
       });
     });

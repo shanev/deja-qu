@@ -28,11 +28,12 @@ describe('Expiration observer', () => {
     return msg;
   }
 
-  it('should construct an expiration observer', (done) => {
+  it('should construct(), start(), and end() expiration observer', (done) => {
     const observer = new ExpirationObserver();
     observer.start();
     assert(observer);
     assert(observer.subscriber);
+    observer.end();
     done();
   });
 
@@ -40,14 +41,13 @@ describe('Expiration observer', () => {
     const q = createQueue();
     const msg = createExpiringMessage();
     q.push(msg).then((count) => {
-      console.log(count);
-      done();
+      assert.equal(count, 1);
+      setTimeout(() => {
+        q.count().then((count2) => {
+          assert.equal(0, count2);
+          done();
+        });
+      }, 1500);
     });
-    // setTimeout(() => {
-    //   q.count().then((count) => {
-    //     assert.equal(0, count);
-    //     done();
-    //   });
-    // }, 1500);
   });
 });
