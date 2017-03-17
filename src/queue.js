@@ -37,7 +37,7 @@ class Queue {
         this.redisClient.rpush(this.key, serializedMessage, (err, count) => {
           if (err) { return reject(err); }
           debug(`Pushed message ${message.id} to ${this.key}`);
-          return resolve(count);
+          return resolve(count[0]);
         });
       } else {
         // push message to queue and publish an expire event
@@ -48,7 +48,7 @@ class Queue {
           .exec((err, count) => {
             if (err) { return reject(err); }
             debug(`Pushed message ${message.id} to ${this.key}`);
-            return resolve(count);
+            return resolve(count[0]);
           });
       }
     });
