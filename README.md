@@ -34,7 +34,7 @@ Check out [Redis quickstart](https://redis.io/topics/quickstart) to install.
 
 Require Déjà qu:
 ```js
-const DejaQu = require('deja-qu');
+const DejaQu = require('deja-qu').DejaQu;
 ```
 
 Initialize Déjà qu, connecting to a local Redis server running on the default port:
@@ -61,7 +61,9 @@ const q = dq.getQueue('timeline', user1);
 
 Create and add a message that expires in 24 hours
 ```js
-const msg = new dq.Message('Have I seen this before?', 86400);
+const Message = require('deja-qu').Message;
+
+const msg = new Message('Have I seen this before?', 86400);
 
 q.push(msg);
 ```
