@@ -23,8 +23,8 @@ class DejaQu {
     this.expirationObserver.start();
   }
 
-  // create a queue and add to the queue list
-  createQueue(name, userId) {
+  // get a queue
+  getQueue(name, userId) {
     return new Queue(this.redisClient, this.namespace, name, userId);
   }
 }
