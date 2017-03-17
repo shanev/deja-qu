@@ -1,5 +1,3 @@
-const debug = require('debug')('deja-qu');
-
 const redis = require('redis');
 
 const Message = require('./src/message');
@@ -17,7 +15,7 @@ class DejaQu {
   constructor(config = null, namespace = 'dejaqu') {
     this.redisClient = (config != null) ? redis.createClient(config) : redis.createClient();
     this.namespace = namespace;
-    this.expirationObserver = new ExpirationObserver(redis, this.redisClient);
+    this.expirationObserver = new ExpirationObserver(config);
   }
 
   // kick off the expiration subscription observer
