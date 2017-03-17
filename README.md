@@ -10,7 +10,7 @@ Déjà qu is Redis-backed FIFO message queue for storing any kind of ephemeral d
 
 ## Installation
 
-If you are using yarn:
+If using yarn:
 
 ```sh
 yarn add deja-qu
@@ -30,12 +30,29 @@ Check out [Redis quickstart](https://redis.io/topics/quickstart) to install.
 
 ## Usage
 
-Initialize and start Déjà qu
+### Step 1: Initialize and start Déjà qu
+
+Require Déjà qu:
+```js
+const DejaQu = require('deja-qu');
+```
+
+Initialize Déjà qu, connecting to a local Redis server running on the default port:
 ```js
 const dq = new DejaQu();
+```
 
+Optionally pass in a [Redis configuration](https://github.com/NodeRedis/node_redis#rediscreateclient) to connect to a remote server.
+```js
+const dq = new DejaQu(REDIS_CLOUD_URL);
+```
+
+Start Déjà qu, ideally right after the server starts.
+```js
 dq.start();
 ```
+
+### Step 2: Profit
 
 Create a queue
 ```js
