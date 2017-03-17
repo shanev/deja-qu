@@ -20,12 +20,11 @@ describe('Expiration observer', () => {
   }
 
   function createExpiringMessage() {
-    const id = null;
     const body = 'Hello';
     const userId = 123;
     const refId = null;
     const expiry = 1; // seconds
-    const msg = new Message(id, body, userId, refId, expiry);
+    const msg = new Message(body, { userId, refId, expiry });
     return msg;
   }
 
@@ -40,13 +39,13 @@ describe('Expiration observer', () => {
   it('should expire key and delete message from queue', (done) => {
     const q = createQueue();
     const msg = createExpiringMessage();
-    // q.push(msg);
+    q.push(msg);
     // setTimeout(() => {
     //   q.count().then((count) => {
     //     assert.equal(0, count);
     //     done();
     //   });
     // }, 1500);
-    done();
+    // done();
   });
 });
