@@ -54,9 +54,9 @@ dq.start();
 
 ### Step 2: Profit
 
-Create a queue
+Get a queue
 ```js
-const q = dq.createQueue('timeline', user1);
+const q = dq.getQueue('timeline', user1);
 ```
 
 Create and add a message that expires in 24 hours
