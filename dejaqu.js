@@ -9,11 +9,13 @@ const Queue = require('./src/queue');
 const ExpirationObserver = require('./src/expirationObserver');
 
 class DejaQu {
-  constructor(namespace = 'dejaqu') {
-    this.redisClient = redis.createClient();
-    this.redisClient.on('error', (err) => {
-      debug(err);
-    });
+  /**
+   * Initializes a DejaQu object.
+   * Optionally takes in a Redis config (https://github.com/NodeRedis/node_redis#rediscreateclient).
+   * Optionally takes in a namespace.
+   */
+  constructor(config = null, namespace = 'dejaqu') {
+    this.redisClient = (config != null) ? redis.createClient(config) : redis.createClient();
     this.namespace = namespace;
     this.expirationObserver = new ExpirationObserver(redis, this.redisClient);
   }
