@@ -19,9 +19,10 @@ class ExpirationObserver {
     this.subscriber.psubscribe('__keyevent@0__:expired');
     this.subscriber.on('pmessage', (pattern, channel, expiredKey) => {
       const key = ExpirationKey.deserialize(expiredKey);
+      const namespace = key.namespace;
       const queueName = key.queueName;
       const userId = key.userId;
-      const q = new Queue(this.publisher, queueName, userId);
+      const q = new Queue(this.publisher, namespace, queueName, userId);
       debug(`Handling expired key: ${expiredKey}`);
       q.pop().then((msg) => {
         debug(`Popped ${msg.id} from ${q.key}`);

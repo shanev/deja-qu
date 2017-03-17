@@ -10,7 +10,7 @@ const Message = require('./message');
  */
 class Queue {
   // creates a FIFO queue
-  constructor(redisClient, name = 'timeline', userId) {
+  constructor(redisClient, namespace, name = 'timeline', userId) {
     if (redisClient == null) {
       throw new Error('A Redis client is required.');
     }
@@ -19,9 +19,10 @@ class Queue {
       throw new Error('A userId is required.');
     }
     this.redisClient = redisClient;
+    this.namespace = namespace;
     this.name = name;
     this.userId = userId;
-    this.key = `user:${userId}:${name}`;
+    this.key = `${namespace}:user:${userId}:${name}`;
   }
 
   /**
@@ -40,7 +41,7 @@ class Queue {
         });
       } else {
         // push message to queue and publish an expire event
-        const expirationKey = new ExpirationKey(this.name, this.userId, message.id).serialize();
+        const expirationKey = new ExpirationKey(this.namespace, this.name, this.userId, message.id).serialize();
         this.redisClient.multi()
           .rpush(this.key, serializedMessage)
           .set(expirationKey, message.id, 'EX', message.expiry)

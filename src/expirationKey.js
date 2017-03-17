@@ -6,14 +6,16 @@ class ExpirationKey {
   // deserialize() a Redis string into an ExpirationKey object
   static deserialize(expiredKey) {
     const tokens = expiredKey.split(':');
-    const userId = tokens[2];
-    const queueName = tokens[3];
-    const messageId = tokens[5];
-    return new ExpirationKey(queueName, userId, messageId);
+    const namespace = tokens[0];
+    const userId = tokens[3];
+    const queueName = tokens[4];
+    const messageId = tokens[6];
+    return new ExpirationKey(namespace, queueName, userId, messageId);
   }
 
   // construct an ExpirationKey object
-  constructor(queueName, userId, messageId) {
+  constructor(namespace, queueName, userId, messageId) {
+    this.namespace = namespace;
     this.queueName = queueName;
     this.userId = userId;
     this.messageId = messageId;
@@ -21,7 +23,7 @@ class ExpirationKey {
 
   // serialize() as a string for storage in Redis
   serialize() {
-    return `expires:user:${this.userId}:${this.queueName}:msg:${this.messageId}`;
+    return `${this.namespace}:expires:user:${this.userId}:${this.queueName}:msg:${this.messageId}`;
   }
 }
 

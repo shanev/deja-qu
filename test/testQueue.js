@@ -8,10 +8,11 @@ describe('Queue model', () => {
   });
 
   function createQueue() {
+    const namespace = 'dejaqu';
     const name = 'timeline';
     const userId = 1234;
     const redisClient = new dq.DejaQu().redisClient;
-    const q = new dq.Queue(redisClient, name, userId);
+    const q = new dq.Queue(redisClient, namespace, name, userId);
     return q;
   }
 

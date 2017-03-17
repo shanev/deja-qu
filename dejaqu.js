@@ -25,7 +25,7 @@ class DejaQu {
 
   // create a queue and add to the queue list
   createQueue(name, userId) {
-    return new Queue(this.redisClient, name, userId);
+    return new Queue(this.redisClient, this.namespace, name, userId);
   }
 }
 
