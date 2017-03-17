@@ -7,7 +7,7 @@ class Message {
   }
 
   // construct a message, a body is required, currently serializes to JSON
-  constructor(id = null, body, userId = null, refId = null, expiry = null) {
+  constructor(body, { id, userId, refId, expiry } = {}) {
     if (body == null) {
       throw new Error('A message body is required.');
     }

@@ -17,17 +17,16 @@ describe('Queue model', () => {
   }
 
   function createMessage() {
-    const msg = new Message(null, 'Hello');
+    const msg = new Message('Hello');
     return msg;
   }
 
   function createExpiringMessage() {
-    const id = null;
     const body = 'Hello';
     const userId = 123;
     const refId = null;
     const expiry = 5; // seconds
-    const msg = new Message(id, body, userId, refId, expiry);
+    const msg = new Message(body, { userId, refId, expiry });
     return msg;
   }
 
