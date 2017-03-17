@@ -4,7 +4,7 @@ const dq = require('../dejaqu.js');
 
 const dqClient = new dq.DejaQu();
 
-const ExpirationObserver = require('../src/expirationObserver');
+const ExpirationObserver = require('../src/expiration-observer');
 
 describe('Expiration observer', () => {
   before(() => {

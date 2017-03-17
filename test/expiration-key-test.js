@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const ExpirationKey = require('../src/expirationKey.js');
+const ExpirationKey = require('../src/expiration-key.js');
 
 describe('ExpirationKey model', () => {
   const namespace = 'dejaqu';

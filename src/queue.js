@@ -1,6 +1,6 @@
 const debug = require('debug')('deja-qu');
 
-const ExpirationKey = require('./expirationKey');
+const ExpirationKey = require('./expiration-key');
 
 const Message = require('./message');
 

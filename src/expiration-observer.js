@@ -2,7 +2,7 @@ const debug = require('debug')('deja-qu');
 
 const redis = require('redis');
 
-const ExpirationKey = require('./expirationKey');
+const ExpirationKey = require('./expiration-key');
 
 const Queue = require('./queue');
 
