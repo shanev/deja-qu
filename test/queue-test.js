@@ -78,6 +78,20 @@ describe('Queue model', () => {
         done();
       });
     });
+
+    it('should get 2 JSON messages from queue', (done) => {
+      const userId = '7890';
+      const q = new DejaQu().getQueue('jsonQueue', userId);
+      const json = { key: 'value' };
+      const msg = new Message(json);
+      q.push(msg);
+      q.push(msg);
+      q.get().then((res) => {
+        assert.equal(res.length, 2);
+        assert.equal(res[1].body.key, 'value');
+        done();
+      });
+    });
   });
 
   describe('.pop()', () => {

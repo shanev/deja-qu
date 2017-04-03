@@ -63,7 +63,8 @@ class Queue {
       this.redisClient.lrange(this.key, start, stop, (err, res) => {
         if (err) { return reject(err); }
         debug(`[Queue] Retrieving messages ${start}..${stop} from ${this.key}`);
-        return resolve(res);
+        const result = res.map(msg => Message.deserialize(msg));
+        return resolve(result);
       });
     });
   }
