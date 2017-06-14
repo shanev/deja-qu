@@ -1,17 +1,16 @@
 const debug = require('debug')('deja-qu');
-
 const redis = require('redis');
-
 const ExpirationKey = require('./expiration-key');
-
 const Queue = require('./queue');
 
 // Subscribes to Redis keyspace events to delete expired messages from queues
 class ExpirationObserver {
   constructor(config = null) {
     this.publisher = (config != null) ? redis.createClient(config) : redis.createClient();
+    this.publisher.client('SETNAME', 'dejaqu-publisher');
     this.subscriber = (config != null) ? redis.createClient(config) : redis.createClient();
     this.subscriber.config('SET', 'notify-keyspace-events', 'Ex');
+    this.subscriber.client('SETNAME', 'dejaqu-subscriber');
     this.expiredPattern = '__keyevent@0__:expired';
   }
 
@@ -31,7 +30,7 @@ class ExpirationObserver {
     });
   }
 
-  end() {
+  stop() {
     this.subscriber.punsubscribe(this.expiredPattern);
     this.subscriber.quit();
     this.publisher.quit();

@@ -14,6 +14,7 @@ class DejaQu {
    */
   constructor(config = null, namespace = 'dejaqu') {
     this.redisClient = (config != null) ? redis.createClient(config) : redis.createClient();
+    this.redisClient.client('SETNAME', namespace);
     this.namespace = namespace;
     this.expirationObserver = new ExpirationObserver(config);
   }
@@ -21,6 +22,10 @@ class DejaQu {
   // kick off the expiration subscription observer
   start() {
     this.expirationObserver.start();
+  }
+
+  stop() {
+    this.expirationObserver.stop();
   }
 
   // get a queue

@@ -1,12 +1,9 @@
 const assert = require('assert');
-
 const DejaQu = require('../dejaqu.js').DejaQu;
-
+const ExpirationObserver = require('../src/expiration-observer');
 const Message = require('../dejaqu.js').Message;
 
 const dq = new DejaQu();
-
-const ExpirationObserver = require('../src/expiration-observer');
 
 describe('Expiration observer', () => {
   before(() => {
@@ -33,7 +30,7 @@ describe('Expiration observer', () => {
     observer.start();
     assert(observer);
     assert(observer.subscriber);
-    observer.end();
+    observer.stop();
     done();
   });
 

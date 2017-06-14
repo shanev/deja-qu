@@ -1,7 +1,5 @@
 const assert = require('assert');
-
 const DejaQu = require('../dejaqu.js').DejaQu;
-
 const Message = require('../dejaqu.js').Message;
 
 describe('Queue model', () => {
