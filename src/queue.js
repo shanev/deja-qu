@@ -84,6 +84,21 @@ class Queue {
   }
 
   /**
+   * delete(message) deletes the message from the queue.
+   * Returns a Promise with num of deleted elements
+   */
+  delete(message) {
+    return new Promise((resolve, reject) => {
+      const msg = message.serialize();
+      this.redisClient.lrem(this.key, -1, msg, (err, res) => {
+        if (err) { return reject(err); }
+        debug(`[Queue] Deleted message ${message.id} from ${this.key}`);
+        return resolve(res);
+      });
+    });
+  }
+
+  /**
    * count() returns the length of the queue
    */
   count() {

@@ -103,4 +103,14 @@ describe('Queue model', () => {
       });
     });
   });
+
+  describe('.delete()', () => {
+    it('should delete and return the count of deleted items from queue', async () => {
+      const q = createQueue();
+      const msg = createMessage();
+      q.push(msg);
+      const num = await q.delete(msg);
+      assert.equal(num, 1);
+    });
+  });
 });
