@@ -78,6 +78,11 @@ Delete the oldest message
 const message = await q.pop();
 ```
 
+Delete specific message
+```js
+await q.delete(messages[3]);
+```
+
 ## Debugging
 
 Add `DEBUG=deja-qu` to the node start script in `package.json` to see debug output. i.e:
