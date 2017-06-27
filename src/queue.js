@@ -1,7 +1,5 @@
 const debug = require('debug')('deja-qu');
-
 const ExpirationKey = require('./expiration-key');
-
 const Message = require('./message');
 
 /**
@@ -41,7 +39,13 @@ class Queue {
         });
       } else {
         // push message to queue and publish an expire event
-        const expirationKey = new ExpirationKey(this.namespace, this.name, this.userId, message.id).serialize();
+        const expirationKey = new ExpirationKey(
+          this.namespace,
+          this.name,
+          this.userId,
+          message.id)
+        .serialize();
+
         this.redisClient.multi()
           .rpush(this.key, serializedMessage)
           .set(expirationKey, message.id, 'EX', message.expiry)

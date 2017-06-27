@@ -1,5 +1,4 @@
 const assert = require('assert');
-
 const DejaQu = require('../dejaqu.js').DejaQu;
 
 describe('DejaQu', () => {

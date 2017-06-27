@@ -1,9 +1,6 @@
 const redis = require('redis');
-
 const Message = require('./src/message');
-
 const Queue = require('./src/queue');
-
 const ExpirationObserver = require('./src/expiration-observer');
 
 class DejaQu {
