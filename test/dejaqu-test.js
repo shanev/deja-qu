@@ -35,12 +35,4 @@ describe('DejaQu', () => {
       done();
     });
   });
-
-  describe('.count()', () => {
-    it('should get a count of the number of queues', async () => {
-      const dq = new DejaQu();
-      const count = await dq.count();
-      assert.equal(count, 2);
-    });
-  });
 });

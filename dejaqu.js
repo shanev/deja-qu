@@ -29,16 +29,6 @@ class DejaQu {
   getQueue(name, userId) {
     return new Queue(this.redisClient, this.namespace, name, userId);
   }
-
-  // returns the total number of queues
-  count() {
-    return new Promise((resolve, reject) => {
-      this.redisClient.keys(`*${this.namespace}*`, (err, keys) => {
-        if (err) { reject(err); }
-        resolve(keys.length);
-      });
-    });
-  }
 }
 
 module.exports = { DejaQu, Message };
