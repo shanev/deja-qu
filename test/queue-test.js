@@ -105,11 +105,20 @@ describe('Queue model', () => {
   });
 
   describe('.delete()', () => {
-    it('should delete and return the count of deleted items from queue', async () => {
+    it('should delete Message object and return the count of deleted items from queue', async () => {
       const q = createQueue();
       const msg = createMessage();
       q.push(msg);
       const num = await q.delete(msg);
+      assert.equal(num, 1);
+    });
+
+    it('should delete serialized Message and return the count of deleted items from queue', async () => {
+      const q = createQueue();
+      const msg = createMessage();
+      q.push(msg);
+      const serializedMsg = msg.serialize();
+      const num = await q.delete(serializedMsg);
       assert.equal(num, 1);
     });
   });

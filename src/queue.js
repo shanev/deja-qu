@@ -93,7 +93,7 @@ class Queue {
    */
   delete(message) {
     return new Promise((resolve, reject) => {
-      const msg = message.serialize();
+      const msg = (message instanceof Message) ? message.serialize() : message;
       this.redisClient.lrem(this.key, -1, msg, (err, res) => {
         if (err) { return reject(err); }
         debug(`[Queue] Deleted message ${message.id} from ${this.key}`);
