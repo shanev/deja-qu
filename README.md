@@ -8,6 +8,10 @@
 
 Déjà qu is Redis-backed FIFO message queue for storing any kind of ephemeral data. It allows you to easily build ephemeral timelines/stories. Messages are automatically removed from the queue once they're expired, without the need for polling, cron jobs, or timers.
 
+### NOTE
+
+This library was mostly a science experiment and hasn't been battle-tested. For production use I'd look at [Bull](https://github.com/OptimalBits/bull) or [Kue](https://github.com/Automattic/kue) instead.
+
 ## Installation
 
 If using yarn:
